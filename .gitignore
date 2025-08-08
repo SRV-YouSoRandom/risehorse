@@ -17,3 +17,7 @@ node_modules
 
 # Ignore the lock files
 package-lock.json
+
+# Ignore the artifacts directory
+artifacts/
+cache/

@@ -1,13 +1,12 @@
 {
-  "name": "risehorse",
+  "name": "horse-racing-game",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
+  "description": "Decentralized Horse Racing Game on Rise Chain",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network riseTestnet",
+    "verify": "hardhat verify --network riseTestnet"
   },
   "keywords": [],
   "author": "",
