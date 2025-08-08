@@ -1,76 +1,96 @@
-const hre = require("hardhat");
+const { ethers } = require("hardhat");
 
 async function main() {
   console.log("Starting deployment to Rise Chain Testnet...");
   
-  const [deployer] = await hre.ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
   console.log("Deploying contracts with account:", deployer.address);
-  console.log("Account balance:", (await deployer.getBalance()).toString());
 
   const riseTokenAddress = process.env.RISE_TOKEN_ADDRESS || "0xd6e1afe5ca8d00a2efc01b89997abe2de47fdfaf";
   
   // 1. Deploy AccessControlManager
   console.log("\n1. Deploying AccessControlManager...");
-  const AccessControlManager = await hre.ethers.getContractFactory("AccessControlManager");
+  const AccessControlManager = await ethers.getContractFactory("AccessControlManager");
   const accessControl = await AccessControlManager.deploy();
-  await accessControl.deployed();
-  console.log("AccessControlManager deployed to:", accessControl.address);
+  await accessControl.waitForDeployment();
+  console.log("AccessControlManager deployed to:", accessControl.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // 2. Deploy TokenManager
   console.log("\n2. Deploying TokenManager...");
-  const TokenManager = await hre.ethers.getContractFactory("TokenManager");
-  const tokenManager = await TokenManager.deploy(riseTokenAddress, accessControl.address);
-  await tokenManager.deployed();
-  console.log("TokenManager deployed to:", tokenManager.address);
+  const TokenManager = await ethers.getContractFactory("TokenManager");
+  const tokenManager = await TokenManager.deploy(riseTokenAddress, accessControl.target);
+  await tokenManager.waitForDeployment();
+  console.log("TokenManager deployed to:", tokenManager.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // 3. Deploy HorseRegistry
   console.log("\n3. Deploying HorseRegistry...");
-  const HorseRegistry = await hre.ethers.getContractFactory("HorseRegistry");
-  const horseRegistry = await HorseRegistry.deploy(accessControl.address);
-  await horseRegistry.deployed();
-  console.log("HorseRegistry deployed to:", horseRegistry.address);
+  const HorseRegistry = await ethers.getContractFactory("HorseRegistry");
+  const horseRegistry = await HorseRegistry.deploy(accessControl.target);
+  await horseRegistry.waitForDeployment();
+  console.log("HorseRegistry deployed to:", horseRegistry.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // 4. Deploy PowerUpSystem
   console.log("\n4. Deploying PowerUpSystem...");
-  const PowerUpSystem = await hre.ethers.getContractFactory("PowerUpSystem");
-  const powerUpSystem = await PowerUpSystem.deploy(accessControl.address, tokenManager.address);
-  await powerUpSystem.deployed();
-  console.log("PowerUpSystem deployed to:", powerUpSystem.address);
+  const PowerUpSystem = await ethers.getContractFactory("PowerUpSystem");
+  const powerUpSystem = await PowerUpSystem.deploy(accessControl.target, tokenManager.target);
+  await powerUpSystem.waitForDeployment();
+  console.log("PowerUpSystem deployed to:", powerUpSystem.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // 5. Deploy BettingPool
   console.log("\n5. Deploying BettingPool...");
-  const BettingPool = await hre.ethers.getContractFactory("BettingPool");
-  const bettingPool = await BettingPool.deploy(accessControl.address, tokenManager.address);
-  await bettingPool.deployed();
-  console.log("BettingPool deployed to:", bettingPool.address);
+  const BettingPool = await ethers.getContractFactory("BettingPool");
+  const bettingPool = await BettingPool.deploy(accessControl.target, tokenManager.target);
+  await bettingPool.waitForDeployment();
+  console.log("BettingPool deployed to:", bettingPool.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // 6. Deploy RaceEngine
   console.log("\n6. Deploying RaceEngine...");
-  const RaceEngine = await hre.ethers.getContractFactory("RaceEngine");
-  const raceEngine = await RaceEngine.deploy(accessControl.address, horseRegistry.address, powerUpSystem.address);
-  await raceEngine.deployed();
-  console.log("RaceEngine deployed to:", raceEngine.address);
+  const RaceEngine = await ethers.getContractFactory("RaceEngine");
+  const raceEngine = await RaceEngine.deploy(accessControl.target, horseRegistry.target, powerUpSystem.target);
+  await raceEngine.waitForDeployment();
+  console.log("RaceEngine deployed to:", raceEngine.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // 7. Deploy RaceManager
   console.log("\n7. Deploying RaceManager...");
-  const RaceManager = await hre.ethers.getContractFactory("RaceManager");
+  const RaceManager = await ethers.getContractFactory("RaceManager");
   const raceManager = await RaceManager.deploy(
-    accessControl.address,
-    tokenManager.address,
-    horseRegistry.address,
-    powerUpSystem.address,
-    bettingPool.address,
-    raceEngine.address
+    accessControl.target,
+    tokenManager.target,
+    horseRegistry.target,
+    powerUpSystem.target,
+    bettingPool.target,
+    raceEngine.target
   );
-  await raceManager.deployed();
-  console.log("RaceManager deployed to:", raceManager.address);
+  await raceManager.waitForDeployment();
+  console.log("RaceManager deployed to:", raceManager.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   // 8. Setup permissions
   console.log("\n8. Setting up permissions...");
   
   // Grant RaceManager role to the main contract
-  await accessControl.grantRaceManagerRole(raceManager.address);
-  console.log("Granted RaceManager role to:", raceManager.address);
+  await accessControl.grantRaceManagerRole(raceManager.target);
+  console.log("Granted RaceManager role to:", raceManager.target);
 
   // Summary
   console.log("\n=== DEPLOYMENT SUMMARY ===");
@@ -78,13 +98,13 @@ async function main() {
   console.log("Chain ID: 11155931");
   console.log("RISE Token:", riseTokenAddress);
   console.log("\nContract Addresses:");
-  console.log("AccessControlManager:", accessControl.address);
-  console.log("TokenManager:", tokenManager.address);
-  console.log("HorseRegistry:", horseRegistry.address);
-  console.log("PowerUpSystem:", powerUpSystem.address);
-  console.log("BettingPool:", bettingPool.address);
-  console.log("RaceEngine:", raceEngine.address);
-  console.log("RaceManager:", raceManager.address);
+  console.log("AccessControlManager:", accessControl.target);
+  console.log("TokenManager:", tokenManager.target);
+  console.log("HorseRegistry:", horseRegistry.target);
+  console.log("PowerUpSystem:", powerUpSystem.target);
+  console.log("BettingPool:", bettingPool.target);
+  console.log("RaceEngine:", raceEngine.target);
+  console.log("RaceManager:", raceManager.target);
   
   console.log("\n=== NEXT STEPS ===");
   console.log("1. Get RISE tokens from faucet: https://faucet.testnet.riselabs.xyz");
@@ -99,13 +119,13 @@ async function main() {
     chainId: 11155931,
     riseToken: riseTokenAddress,
     contracts: {
-      accessControl: accessControl.address,
-      tokenManager: tokenManager.address,
-      horseRegistry: horseRegistry.address,
-      powerUpSystem: powerUpSystem.address,
-      bettingPool: bettingPool.address,
-      raceEngine: raceEngine.address,
-      raceManager: raceManager.address
+      accessControl: accessControl.target,
+      tokenManager: tokenManager.target,
+      horseRegistry: horseRegistry.target,
+      powerUpSystem: powerUpSystem.target,
+      bettingPool: bettingPool.target,
+      raceEngine: raceEngine.target,
+      raceManager: raceManager.target
     }
   };
   
