@@ -3,12 +3,13 @@
   "chainId": 11155931,
   "riseToken": "0xd6e1afe5ca8d00a2efc01b89997abe2de47fdfaf",
   "contracts": {
-    "accessControl": "0xce5bF4106f5e42ba01488411cf1B48242f8F1d55",
-    "tokenManager": "0x31B190d8eC8345009Bc0FB0F8Cb9c7EeFb9E1B9D",
-    "horseRegistry": "0xA8C8584C826e91D1320c7F0Bb8A802F18d9dcD04",
-    "powerUpSystem": "0x1c5C6B494A83EF17545ff2852ec776e7776fcb3f",
-    "bettingPool": "0xb0464cbD2ec6240C1B63B03711118f6B2dd29050",
-    "raceEngine": "0xc56e943464915Dd85650f5d28Feed987bE353c77",
-    "raceManager": "0x4153B1912e59FF19733BBCE678Ee17C8F73Fb5D2"
+    "accessControl": "0x42555b84Cc959d5071E7355c849373e8A27C6Cce",
+    "tokenManager": "0x5FcDc8dCfA1fFBcFDe4796462AC843b9026400CC",
+    "horseRegistry": "0x3bC665C0a28a7Abc5dD1B4C82F34924249Fc4696",
+    "powerUpSystem": "0x4fC0Dc1F873B21697F19af739aE5Fa50E4Bb9b69",
+    "bettingPool": "0x2CDB7FaB734C8ca9Ad8Ce96Ed1500Bc677af5A92",
+    "raceEngine": "0xF92189232C8996656E6190036da6dC5679B38d2D",
+    "raceManager": "0x73070e6a45B4Fcd2A19dEE25Ac341F07899ef238",
+    "raceScheduler": "0xB6639C179daDeeCa8430747f0fF7c045873C9d69"
   }
 }

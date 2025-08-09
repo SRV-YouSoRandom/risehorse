@@ -1,0 +1,14 @@
+{
+  "network": "riseTestnet",
+  "chainId": 11155931,
+  "riseToken": "0xd6e1afe5ca8d00a2efc01b89997abe2de47fdfaf",
+  "contracts": {
+    "accessControl": "0xce5bF4106f5e42ba01488411cf1B48242f8F1d55",
+    "tokenManager": "0x31B190d8eC8345009Bc0FB0F8Cb9c7EeFb9E1B9D",
+    "horseRegistry": "0xA8C8584C826e91D1320c7F0Bb8A802F18d9dcD04",
+    "powerUpSystem": "0x1c5C6B494A83EF17545ff2852ec776e7776fcb3f",
+    "bettingPool": "0xb0464cbD2ec6240C1B63B03711118f6B2dd29050",
+    "raceEngine": "0xc56e943464915Dd85650f5d28Feed987bE353c77",
+    "raceManager": "0x4153B1912e59FF19733BBCE678Ee17C8F73Fb5D2"
+  }
+}

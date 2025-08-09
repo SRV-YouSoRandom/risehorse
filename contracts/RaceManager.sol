@@ -49,7 +49,8 @@ contract RaceManager is ReentrancyGuard {
     modifier onlyAuthorized() {
         require(
             accessControl.isAdmin(msg.sender) || 
-            accessControl.isOperator(msg.sender),
+            accessControl.isOperator(msg.sender) ||
+            accessControl.isRaceManager(msg.sender),
             "RaceManager: Not authorized"
         );
         _;
@@ -75,9 +76,9 @@ contract RaceManager is ReentrancyGuard {
         string memory name,
         uint256[] memory participatingHorses,
         uint256 bettingDuration
-    ) external onlyAdmin returns (uint256) {
+    ) external onlyAuthorized returns (uint256) {
         require(participatingHorses.length >= 2 && participatingHorses.length <= 10, "RaceManager: Invalid horse count");
-        require(bettingDuration >= 300 && bettingDuration <= 3600, "RaceManager: Invalid betting duration"); // 5min to 1hour
+        require(bettingDuration >= 300 && bettingDuration <= 3600, "RaceManager: Invalid betting duration");
         
         totalRaces++;
         uint256 raceId = totalRaces;

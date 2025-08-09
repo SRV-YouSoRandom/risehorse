@@ -85,12 +85,28 @@ async function main() {
   console.log("Waiting 2 seconds...");
   await new Promise(resolve => setTimeout(resolve, 2000));
 
-  // 8. Setup permissions
-  console.log("\n8. Setting up permissions...");
+  // 8. Deploy RaceScheduler
+  console.log("\n8. Deploying RaceScheduler...");
+  const RaceScheduler = await ethers.getContractFactory("RaceScheduler");
+  const raceScheduler = await RaceScheduler.deploy(accessControl.target, raceManager.target);
+  await raceScheduler.waitForDeployment();
+  console.log("RaceScheduler deployed to:", raceScheduler.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // 9. Setup permissions
+  console.log("\n9. Setting up permissions...");
   
-  // Grant RaceManager role to the main contract
+  // Grant RaceManager role to both contracts
   await accessControl.grantRaceManagerRole(raceManager.target);
   console.log("Granted RaceManager role to:", raceManager.target);
+
+  console.log("Waiting 2 seconds...");
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  
+  await accessControl.grantRaceManagerRole(raceScheduler.target);
+  console.log("Granted RaceManager role to:", raceScheduler.target);
 
   // Summary
   console.log("\n=== DEPLOYMENT SUMMARY ===");
@@ -105,12 +121,14 @@ async function main() {
   console.log("BettingPool:", bettingPool.target);
   console.log("RaceEngine:", raceEngine.target);
   console.log("RaceManager:", raceManager.target);
+  console.log("RaceScheduler:", raceScheduler.target);
   
   console.log("\n=== NEXT STEPS ===");
   console.log("1. Get RISE tokens from faucet: https://faucet.testnet.riselabs.xyz");
   console.log("2. Approve RISE tokens for contracts");
   console.log("3. Create your first race using RaceManager.createRace()");
   console.log("4. Test betting and power-up features");
+  console.log("5. Use RaceScheduler for automated races");
   
   // Save deployment addresses to file
   const fs = require('fs');
@@ -125,7 +143,8 @@ async function main() {
       powerUpSystem: powerUpSystem.target,
       bettingPool: bettingPool.target,
       raceEngine: raceEngine.target,
-      raceManager: raceManager.target
+      raceManager: raceManager.target,
+      raceScheduler: raceScheduler.target
     }
   };
   
